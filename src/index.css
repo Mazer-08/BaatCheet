@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* bg - 111812 */
+/* text - d3fbd1 FFF5EA f8f7f4 FBFFF4 f1faff*/
+
+/* mobile:
+    heading : FFF5EA, text-lg || 1.125rem
+    text: FFF5EA, text-xs || 0.75em
+     */

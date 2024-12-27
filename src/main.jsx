@@ -4,7 +4,7 @@ import App from './App.jsx'
 import ChatPage from './pages/ChatPage.jsx'
 import './index.css'
 
-// react-router
+// importing react-router
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 // chakra ui
@@ -14,6 +14,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 
+// mapping path to components
 const router  = createBrowserRouter([
   {
     path:'/',

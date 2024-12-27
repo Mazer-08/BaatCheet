@@ -1,3 +1,5 @@
+// no use
+
 import React from 'react'
 import Chat from './Chat';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,9 +10,9 @@ export const Chatlist = () => {
     const chatMode = useSelector(state => state.chatModeSelector.chatMode);
     return (
         <>
-            {chatMode && chatList.map((chat, index) => {
+            {/* {chatMode && chatList.map((chat, index) => {
                 return <Chat key={index} chat={chat} />;
-            })}
+            })} */}
         </>
     )
 };

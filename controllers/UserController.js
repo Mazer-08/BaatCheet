@@ -2,40 +2,54 @@ const UserModel = require("../models/UserModel")
 const generateToken = require("../config/GenerateToken")
 
 module.exports.registerUser = async (req, res) => {
+    console.log("Request Received.")
     const { name, username, email, password, pic } = req.body;
     try{
         // basic checks
         if(!name || !username || !email || !password ){
             res.status(400).json({errorMsg: "Incomplete Credentials"});
-            // console.log("Incomplete Credentials");
+            console.log("Incomplete Credentials");
             return;
         }
-        const userExists = await UserModel.findOne({username});
-        if(userExists){
-            res.status(400).json({errorMsg: "User already exists"});
-            // console.log("User already exists"); 
-            return;    
+
+        // checking if user exists
+        try{
+            const userExists = await UserModel.findOne({username});
+            if(userExists){
+                res.status(400).json({errorMsg: "User already exists"});
+                console.log("User already exists"); 
+                return;    
+            }
+        } catch(error) {
+            console.log("Error in checking DB for existing user.")
+            res.status(502).send(`Error in checking DB for existing user : ${error.message}`);
         }
 
         // create user
-        const user = await UserModel.create({
-            name, username, email, password, pic, 
-        });
-        if(user){
-            // console.log("User Created")
-            res.status(201).json({
-                _id: user._id,
-                name: user.name,
-                username: user.username,
-                email: user.email,
-                pic: user.pic,
+        try{
+            const user = await UserModel.create({
+                name, username, email, password, pic, 
             });
-        }
-        else{
-            res.status(400).json({errorMsg: "User Not Created"});
+            if(user){
+                console.log("User Created")
+                res.status(201).json({
+                    _id: user._id,
+                    name: user.name,
+                    username: user.username,
+                    email: user.email,
+                    pic: user.pic,
+                });
+            }
+            else{
+                res.status(400).json({errorMsg: "User Not Created"});
+            }
+        } catch(error) {
+            console.log(`Error creating a user: ${error.message}`)
+            res.status(502).send(`Error creating a user.`);
         }
     }
     catch(error){
+        console.log("Error while processing request.")
         res.status(400).send(`User Not Created. Error encountered: ${error.message}`);
     }
 };

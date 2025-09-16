@@ -1,7 +1,7 @@
 const express = require ("express")
 const cors = require("cors")
 require("dotenv").config()
-const connectDB = require('./config/db')
+const connectToDB = require('./config/db')
 const UserRoutes = require('./routes/UserRoutes')   
 const ChatRoutes = require('./routes/ChatRoutes')
 const MessageRoutes = require('./routes/MessageRoutes')
@@ -13,7 +13,21 @@ app.get("/", (req,res)=>{
     res.send("Hello from baatcheet Admin");
 })
 
-connectDB();
+// Async function connectToDB awaits a promise.
+let server;
+connectToDB().then(()=>{
+    server = app.listen(PORT, () => {
+    console.log(`Server up and running at port: ${PORT}`);
+    });
+
+    server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Please use a different port.`);
+    } else {
+        console.error('An unexpected server error occurred:', err);
+    }
+    });
+});
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +35,6 @@ app.use(express.json());
 app.use('/api/user', UserRoutes);
 app.use('/api/chat', ChatRoutes);
 app.use('/api/message', MessageRoutes);
-const server = app.listen(PORT, ()=>{console.log(`Server up and about at ${PORT}`)});
 
 const io = require("socket.io")(server, {
     pingTimeout: 60000,
